@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        .sensor-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .sensor-btn:hover {
+            background-color: #45a049;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+            max-width: 600px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sensor Dashboard</h1>
+
+    <!-- Sensor Buttons -->
+    <button class="sensor-btn" onclick="showTable(1)">Sensor 1</button>
+    <button class="sensor-btn" onclick="showTable(2)">Sensor 2</button>
+    <button class="sensor-btn" onclick="showTable(3)">Sensor 3</button>
+    <button class="sensor-btn" onclick="showTable(4)">Sensor 4</button>
+    <button class="sensor-btn" onclick="showTable(5)">Sensor 5</button>
+
+    <!-- Table to Display Data -->
+    <div id="table-container">
+        <table id="sensor-table" style="display:none;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Reading</th>
+                    <th>Battery</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Rows will be inserted here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const sensorData = {
+            1: [
+                { id: 'S1-001', date: '2024-09-25', time: '10:00', reading: '2.124', battery: '80%' },
+                { id: 'S1-002', date: '2024-09-25', time: '12:00', reading: '2.100', battery: '78%' },
+                { id: 'S1-003', date: '2024-09-25', time: '14:00', reading: '2.099', battery: '77%' },
+                { id: 'S1-004', date: '2024-09-26', time: '08:00', reading: '2.125', battery: '75%' },
+                { id: 'S1-005', date: '2024-09-26', time: '10:00', reading: '2.099', battery: '74%' },
+                { id: 'S1-006', date: '2024-09-26', time: '12:00', reading: '2.124', battery: '73%' },
+                { id: 'S1-007', date: '2024-09-26', time: '14:00', reading: '2.099', battery: '72%' },
+                { id: 'S1-008', date: '2024-09-27', time: '10:00', reading: '2.125', battery: '71%' }
+            ],
+            2: [
+                { id: 'S2-001', date: '2024-09-25', time: '09:30', reading: '2.124', battery: '85%' },
+                { id: 'S2-002', date: '2024-09-25', time: '11:00', reading: '2.100', battery: '82%' },
+                { id: 'S2-003', date: '2024-09-25', time: '12:30', reading: '2.099', battery: '81%' },
+                { id: 'S2-004', date: '2024-09-25', time: '14:00', reading: '2.125', battery: '80%' },
+                { id: 'S2-005', date: '2024-09-26', time: '09:00', reading: '2.099', battery: '79%' },
+                { id: 'S2-006', date: '2024-09-26', time: '10:30', reading: '2.124', battery: '78%' },
+                { id: 'S2-007', date: '2024-09-26', time: '12:00', reading: '2.099', battery: '77%' },
+                { id: 'S2-008', date: '2024-09-26', time: '13:30', reading: '2.125', battery: '76%' }
+            ],
+            3: [
+                { id: 'S3-001', date: '2024-09-25', time: '11:15', reading: '2.124', battery: '90%' },
+                { id: 'S3-002', date: '2024-09-25', time: '12:45', reading: '2.100', battery: '88%' },
+                { id: 'S3-003', date: '2024-09-25', time: '14:15', reading: '2.099', battery: '87%' },
+                { id: 'S3-004', date: '2024-09-26', time: '08:45', reading: '2.125', battery: '85%' },
+                { id: 'S3-005', date: '2024-09-26', time: '10:15', reading: '2.099', battery: '84%' },
+                { id: 'S3-006', date: '2024-09-26', time: '11:45', reading: '2.124', battery: '83%' },
+                { id: 'S3-007', date: '2024-09-26', time: '13:15', reading: '2.099', battery: '82%' },
+                { id: 'S3-008', date: '2024-09-26', time: '14:45', reading: '2.125', battery: '81%' }
+            ],
+            4: [
+                { id: 'S4-001', date: '2024-09-25', time: '08:50', reading: '2.124', battery: '92%' },
+                { id: 'S4-002', date: '2024-09-25', time: '10:20', reading: '2.100', battery: '91%' },
+                { id: 'S4-003', date: '2024-09-25', time: '11:50', reading: '2.099', battery: '89%' },
+                { id: 'S4-004', date: '2024-09-26', time: '09:00', reading: '2.125', battery: '88%' },
+                { id: 'S4-005', date: '2024-09-26', time: '10:30', reading: '2.099', battery: '87%' },
+                { id: 'S4-006', date: '2024-09-26', time: '12:00', reading: '2.124', battery: '86%' },
+                { id: 'S4-007', date: '2024-09-26', time: '13:30', reading: '2.099', battery: '85%' },
+                { id: 'S4-008', date: '2024-09-26', time: '15:00', reading: '2.125', battery: '84%' }
+            ],
+            5: [
+                { id: 'S5-001', date: '2024-09-25', time: '07:40', reading: '2.124', battery: '75%' },
+                { id: 'S5-002', date: '2024-09-25', time: '09:10', reading: '2.100', battery: '74%' },
+                { id: 'S5-003', date: '2024-09-25', time: '10:40', reading: '2.099', battery: '73%' },
+                { id: 'S5-004', date: '2024-09-25', time: '12:10', reading: '2.125', battery: '72%' },
+                { id: 'S5-005', date: '2024-09-26', time: '08:00', reading: '2.099', battery: '71%' },
+                { id: 'S5-006', date: '2024-09-26', time: '09:30', reading: '2.124', battery: '70%' },
+                { id: 'S5-007', date: '2024-09-26', time: '11:00', reading: '2.099', battery: '69%' },
+                { id: 'S5-008', date: '2024-09-26', time: '12:30', reading: '2.125', battery: '68%' }
+            ]
+        };
+
+        function showTable(sensorId) {
+            const tableBody = document.getElementById('table-body');
+            const table = document.getElementById('sensor-table');
+            tableBody.innerHTML = ''; // Clear previous table rows
+
+            const data = sensorData[sensorId];
+
+            data.forEach(row => {
+                const newRow = `
+                    <tr>
+                        <td>${row.id}</td>
+                        <td>${row.date}</td>
+                        <td>${row.time}</td>
+                        <td>${row.reading}</td>
+                        <td>${row.battery}</td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', newRow);
+            });
+
+            table.style.display = 'table'; // Show the table
+        }
+        
+    </script>
+
+</body>
+</html>
